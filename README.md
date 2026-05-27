@@ -4,14 +4,14 @@
 
 ## Language / Idioma
 
-- [🇬🇧 English version](#english)
-- [🇵🇹 Versão em Português](#portugues)
+- [English version](#english)
+- [Versão em Português](#portugues)
 
 ---
 
 <a name="english"></a>
 
-# 🇬🇧 English
+# English
 
 [→ View dashboard](https://andrepocassousa.github.io/porto-export-lens/index-en.html)
 
@@ -155,7 +155,7 @@ https://www.linkedin.com/in/andrepocasousa/
 
 <a name="portugues"></a>
 
-# 🇵🇹 Português
+# Português
 
 [→ Ver dashboard](https://andrepocassousa.github.io/porto-export-lens/index.html)
 
@@ -250,7 +250,7 @@ porto-export-lens/
 
 ## SQL queries 
 
-### Top 15 markets by value in 2025
+### Top 15 mercado em valor em 2025
 
 ```sql
 SELECT
