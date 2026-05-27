@@ -4,7 +4,7 @@
 
 **[→ View dashboard (EN)](https://andresousa.github.io/porto-export-lens/index-en.html)** · **[→ Ver dashboard (PT)](https://andresousa.github.io/porto-export-lens/index.html)**
 
-![Porto Export Lens Dashboard](assets/dashboard_preview.png)
+![Porto Export Lens Dashboard](assets/dashboard_preview.png.png)
 
 ---
 
