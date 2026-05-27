@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Port Wine Export Intelligence | André Sousa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --wine:#6B1E2A;--wine-light:#8B2E3E;--wine-pale:#F5EEE6;
+  --gold:#C9963A;--gold-light:#E8C06A;--ink:#1A1410;--ink-soft:#3D2F28;
+  --gray:#7A6E68;--gray-light:#B8AFA8;--border:#E8DDD5;
+  --bg:#FDFAF7;--white:#FFFFFF;--success:#1D7A5A;--warning:#C9963A;--danger:#A32D2D;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.7}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(253,250,247,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{font-family:'Playfair Display',serif;font-size:17px;color:var(--wine);letter-spacing:.02em}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{font-size:13px;color:var(--gray);text-decoration:none;letter-spacing:.03em;transition:color .2s}
+.nav-links a:hover{color:var(--wine)}
+.nav-lang{font-size:12px;padding:4px 10px;border:1px solid var(--border);border-radius:6px;color:var(--gray);text-decoration:none}
+.nav-lang:hover{background:var(--wine-pale);color:var(--wine)}
+.hero{padding:140px 2rem 80px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.hero-eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;font-weight:500}
+.hero-title{font-family:'Playfair Display',serif;font-size:48px;line-height:1.15;color:var(--ink);margin-bottom:1.5rem;font-weight:700}
+.hero-title span{color:var(--wine)}
+.hero-desc{font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:2rem;font-weight:300}
+.hero-author{display:flex;align-items:center;gap:14px;padding-top:1.5rem;border-top:1px solid var(--border)}
+.author-avatar{width:44px;height:44px;border-radius:50%;background:var(--wine);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:white;flex-shrink:0}
+.author-name{font-size:14px;font-weight:500;color:var(--ink)}
+.author-role{font-size:12px;color:var(--gray)}
+.hero-visual{position:relative}
+.hero-stat-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:12px;position:relative;overflow:hidden}
+.hero-stat-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--wine)}
+.hero-stat-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gray-light);margin-bottom:6px}
+.hero-stat-value{font-family:'Playfair Display',serif;font-size:32px;color:var(--ink);font-weight:700}
+.hero-stat-sub{font-size:12px;color:var(--gray);margin-top:4px}
+.hero-stat-badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;margin-top:8px}
+.badge-up{background:#E8F5F0;color:var(--success)}
+.badge-down{background:#FCEAEA;color:var(--danger)}
+.badge-neutral{background:var(--wine-pale);color:var(--wine)}
+.section{max-width:1100px;margin:0 auto;padding:5rem 2rem}
+.section-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;font-weight:500}
+.section-title{font-family:'Playfair Display',serif;font-size:32px;color:var(--ink);margin-bottom:1rem;font-weight:700}
+.section-desc{font-size:15px;color:var(--gray);max-width:680px;line-height:1.8;font-weight:300}
+.divider{border:none;border-top:1px solid var(--border);max-width:1100px;margin:0 auto}
+.context-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:2.5rem}
+.context-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:24px}
+.context-card-title{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:8px}
+.context-card-text{font-size:13px;color:var(--gray);line-height:1.7}
+.context-card-num{font-family:'Playfair Display',serif;font-size:28px;color:var(--wine);font-weight:700;margin-bottom:4px}
+.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:2rem}
+.method-step{background:var(--wine-pale);border-radius:12px;padding:20px;position:relative}
+.method-num{font-family:'Playfair Display',serif;font-size:36px;color:var(--border);font-weight:700;position:absolute;top:12px;right:16px}
+.method-title{font-size:13px;font-weight:500;color:var(--wine);margin-bottom:6px;position:relative}
+.method-text{font-size:12px;color:var(--ink-soft);line-height:1.6;position:relative}
+.kpi-strip{background:var(--wine);padding:3rem 2rem;margin:0}
+.kpi-strip-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:1.5rem}
+.kpi-item{text-align:center}
+.kpi-num{font-family:'Playfair Display',serif;font-size:36px;color:var(--white);font-weight:700}
+.kpi-lbl{font-size:12px;color:rgba(255,255,255,.6);margin-top:4px;letter-spacing:.04em}
+.kpi-delta{font-size:11px;margin-top:6px;padding:2px 10px;border-radius:20px;display:inline-block}
+.kpi-delta-pos{background:rgba(255,255,255,.15);color:rgba(255,255,255,.85)}
+.kpi-delta-neg{background:rgba(255,100,100,.2);color:rgba(255,200,200,.9)}
+.chart-area{margin-top:2.5rem}
+.chart-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px}
+.chart-card-title{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:4px}
+.chart-card-desc{font-size:13px;color:var(--gray);margin-bottom:8px}
+.chart-two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.insights-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:2.5rem}
+.insight-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:28px;position:relative;overflow:hidden}
+.insight-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.insight-card.opportunity::after{background:var(--success)}
+.insight-card.watch::after{background:var(--gold)}
+.insight-card.alert::after{background:var(--danger)}
+.insight-tag{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:500;margin-bottom:12px;display:inline-block}
+.insight-tag.opportunity{color:var(--success)}
+.insight-tag.watch{color:var(--gold)}
+.insight-tag.alert{color:var(--danger)}
+.insight-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--ink);margin-bottom:10px;font-weight:700}
+.insight-text{font-size:14px;color:var(--gray);line-height:1.75}
+.insight-metric{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+.metric-pill{font-size:12px;padding:4px 12px;border-radius:20px;background:var(--wine-pale);color:var(--wine);font-weight:500}
+.limit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:2rem}
+.limit-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px}
+.limit-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gray-light);margin-bottom:8px}
+.limit-text{font-size:13px;color:var(--gray);line-height:1.7}
+.contact-area{background:var(--wine);border-radius:24px;padding:48px;text-align:center;margin-top:2.5rem}
+.contact-title{font-family:'Playfair Display',serif;font-size:28px;color:var(--white);margin-bottom:12px;font-weight:700}
+.contact-desc{font-size:14px;color:rgba(255,255,255,.7);margin-bottom:2rem;line-height:1.8}
+.contact-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.contact-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;transition:all .2s}
+.contact-btn-primary{background:var(--white);color:var(--wine)}
+.contact-btn-primary:hover{background:var(--wine-pale)}
+.contact-btn-secondary{background:rgba(255,255,255,.15);color:var(--white);border:1px solid rgba(255,255,255,.3)}
+.contact-btn-secondary:hover{background:rgba(255,255,255,.25)}
+.source-note{background:var(--wine-pale);border-radius:12px;padding:16px 20px;margin-top:2rem;font-size:12px;color:var(--ink-soft);line-height:1.7}
+footer{text-align:center;padding:2rem;font-size:12px;color:var(--gray-light);border-top:1px solid var(--border);margin-top:4rem}
+@media(max-width:768px){
+  .hero{grid-template-columns:1fr;padding-top:100px}
+  .hero-title{font-size:32px}
+  .hero-visual{display:none}
+  .context-grid,.method-grid{grid-template-columns:1fr}
+  .kpi-strip-inner{grid-template-columns:repeat(2,1fr)}
+  .chart-two-col,.insights-grid,.limit-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">Porto Export Lens</div>
+    <div class="nav-links">
+      <a href="#context">Context</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#insights">Insights</a>
+      <a href="#contact">Contact</a>
+      <a href="index.html" class="nav-lang">PT</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Market intelligence project · Historical series 2006–2025</div>
+    <h1 class="hero-title">Export market intelligence for <span>Port Wine</span></h1>
+    <p class="hero-desc">André Sousa — Key Account Manager with experience in pharmaceutical exports. This project applies market analysis methodologies to the Port Wine sector, with the goal of identifying export opportunities based on public IVDP data.</p>
+    <div class="hero-author">
+      <div class="author-avatar">AS</div>
+      <div>
+        <div class="author-name">André Sousa</div>
+        <div class="author-role">Key Account Manager · Vila Nova de Gaia</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-stat-card">
+      <div class="hero-stat-label">International exports 2025</div>
+      <div class="hero-stat-value">€352M</div>
+      <div class="hero-stat-sub">Bottled Port Wine · 133 markets</div>
+      <span class="hero-stat-badge badge-neutral">Stable vs 2024</span>
+    </div>
+    <div class="hero-stat-card">
+      <div class="hero-stat-label">Fastest growing market</div>
+      <div class="hero-stat-value">Mexico</div>
+      <div class="hero-stat-sub">+57% in value vs 2024</div>
+      <span class="hero-stat-badge badge-up">Accelerating</span>
+    </div>
+    <div class="hero-stat-card">
+      <div class="hero-stat-label">Highest price per litre</div>
+      <div class="hero-stat-value">€13.38/l</div>
+      <div class="hero-stat-sub">UAE — luxury market</div>
+      <span class="hero-stat-badge badge-up">+38% vs 2024</span>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<section class="section" id="context">
+  <div class="section-label">Background</div>
+  <h2 class="section-title">The problem this project solves</h2>
+  <p class="section-desc">Port Wine exporters make market decisions based on historical experience and commercial intuition. The data exists — the IVDP publishes detailed export statistics by destination country, volume and value since 2006 — but it is rarely processed systematically. A typical KAM cannot answer in 30 seconds: "which market has grown the most in value per litre over the past 5 years?"</p>
+
+  <div class="context-grid">
+    <div class="context-card">
+      <div class="context-card-num">187</div>
+      <div class="context-card-title">Countries with export records</div>
+      <div class="context-card-text">The dataset covers 187 destination markets over 20 years, enabling identification of long-term patterns and emerging markets before they become obvious.</div>
+    </div>
+    <div class="context-card">
+      <div class="context-card-num">2006–2025</div>
+      <div class="context-card-title">Complete historical series</div>
+      <div class="context-card-text">Twenty years of data contextualise the impact of the financial crisis, the pandemic, and Brexit on exports — isolating structural trends from short-term noise.</div>
+    </div>
+    <div class="context-card">
+      <div class="context-card-num">3</div>
+      <div class="context-card-title">Central business questions</div>
+      <div class="context-card-text">Where are the untapped opportunities? Which markets are accelerating? Where does Port achieve the highest price per litre? Each dashboard section answers one of these questions.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:3rem">
+    <div class="section-label">Methodology</div>
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);margin-bottom:1rem;font-weight:500">Data pipeline</h3>
+    <div class="method-grid">
+      <div class="method-step">
+        <div class="method-num">1</div>
+        <div class="method-title">Source</div>
+        <div class="method-text">Export files by country published by the IVDP — historical series 2006 to 2025, with volume (litres), value (€) and average price per litre.</div>
+      </div>
+      <div class="method-step">
+        <div class="method-num">2</div>
+        <div class="method-title">Cleaning</div>
+        <div class="method-text">Country name normalisation, removal of aggregate totals, handling of missing values. Final dataset: 2,461 clean records in CSV.</div>
+      </div>
+      <div class="method-step">
+        <div class="method-num">3</div>
+        <div class="method-title">Analysis</div>
+        <div class="method-text">SQL queries in DuckDB to calculate rankings, YoY changes, and segmentation by market profile (volume, growth, price).</div>
+      </div>
+      <div class="method-step">
+        <div class="method-num">4</div>
+        <div class="method-title">Visualisation</div>
+        <div class="method-text">Interactive dashboard with Chart.js. Code available on GitHub for reproducibility and methodology audit.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<div class="kpi-strip">
+  <div class="kpi-strip-inner">
+    <div class="kpi-item">
+      <div class="kpi-num">€352M</div>
+      <div class="kpi-lbl">Exports 2025</div>
+      <div class="kpi-delta kpi-delta-pos">excl. domestic market</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">€5.51</div>
+      <div class="kpi-lbl">Average price per litre</div>
+      <div class="kpi-delta kpi-delta-pos">+1.5% vs 2024</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">133</div>
+      <div class="kpi-lbl">Active markets</div>
+      <div class="kpi-delta kpi-delta-pos">buying countries in 2025</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">63.9M</div>
+      <div class="kpi-lbl">Litres exported</div>
+      <div class="kpi-delta kpi-delta-neg">-0.3% vs 2024</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">2006–2025</div>
+      <div class="kpi-lbl">Historical series</div>
+      <div class="kpi-delta kpi-delta-pos">20 years · 187 markets</div>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="dashboard">
+  <div class="section-label">Market analysis</div>
+  <h2 class="section-title">Export dashboard — 2025</h2>
+  <p class="section-desc">Bottled Port Wine export data by destination country. Historical series 2006–2025. Reference year for current analysis: 2025, compared with 2024.</p>
+
+  <div class="chart-area">
+    <div class="chart-card">
+      <div class="chart-card-title">Top 15 markets by export value — 2025</div>
+      <div class="chart-card-desc">France leads in absolute value (€66M), but the US and Denmark stand out for price per litre — a sign of differentiated premium positioning.</div>
+      <div style="margin-bottom:10px;display:flex;gap:16px;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#7A6E68"><span style="width:10px;height:10px;border-radius:2px;background:#6B1E2A;display:inline-block"></span>Premium markets highlighted</span>
+        <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#7A6E68"><span style="width:10px;height:10px;border-radius:2px;background:#D8CEC5;display:inline-block"></span>Other markets</span>
+      </div>
+      <div style="position:relative;width:100%;height:420px">
+        <canvas id="chart1" role="img" aria-label="Top 15 Port Wine markets by value in 2025. France leads with €66M, followed by UK with €48.5M and USA with €37.8M.">France €66M, UK €48.5M, USA €37.8M.</canvas>
+      </div>
+    </div>
+
+    <div class="chart-two-col">
+      <div class="chart-card">
+        <div class="chart-card-title">Accelerating markets — growth 2024→2025</div>
+        <div class="chart-card-desc">Markets with growth above 30% highlighted. Mexico and Finland emerge as surprises.</div>
+        <div style="margin-bottom:10px;display:flex;gap:16px;flex-wrap:wrap">
+          <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#7A6E68"><span style="width:10px;height:10px;border-radius:2px;background:#1D7A5A;display:inline-block"></span>Growth above 30%</span>
+          <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#7A6E68"><span style="width:10px;height:10px;border-radius:2px;background:#D8CEC5;display:inline-block"></span>Others</span>
+        </div>
+        <div style="position:relative;width:100%;height:380px">
+          <canvas id="chart2" role="img" aria-label="Percentage growth of Port Wine markets from 2024 to 2025. Mexico leads with +57%.">Mexico +57%, Finland +48%, UAE +38%.</canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title">Premium markets — average price per litre (2025)</div>
+        <div class="chart-card-desc">UAE and Macau lead on value positioning. South Korea combines high price with strong growth.</div>
+        <div style="margin-bottom:10px;display:flex;gap:16px;flex-wrap:wrap">
+          <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#7A6E68"><span style="width:10px;height:10px;border-radius:2px;background:#6B1E2A;display:inline-block"></span>Above €9/litre</span>
+          <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#7A6E68"><span style="width:10px;height:10px;border-radius:2px;background:#D8CEC5;display:inline-block"></span>Others</span>
+        </div>
+        <div style="position:relative;width:100%;height:380px">
+          <canvas id="chart3" role="img" aria-label="Average price per litre of Port Wine in 2025. UAE leads with €13.38/l.">UAE €13.38/l, Macau €11.07/l, South Korea €9.66/l.</canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-note">
+      <strong>Methodological note:</strong> Analysis focused on bottled Port Wine, based on export data by destination country published by the IVDP. Excludes domestic market (Portugal), bulk wine and special categories. Source: IVDP — Instituto dos Vinhos do Douro e Porto. Series 2006–2025.
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="section" id="insights">
+  <div class="section-label">Strategic interpretation</div>
+  <h2 class="section-title">What the data reveals</h2>
+  <p class="section-desc">Four findings with direct implications for an export strategy — framed from the perspective of a KAM who uses data to prioritise markets and prepare conversations with importers.</p>
+
+  <div class="insights-grid">
+    <div class="insight-card opportunity">
+      <div class="insight-tag opportunity">Priority opportunity</div>
+      <div class="insight-title">South Korea — premium and accelerating</div>
+      <div class="insight-text">South Korea has grown over 200% in value since 2019 and maintains an average price of €9.66/litre in 2025 — the third highest of all markets. It is the only country appearing simultaneously in the growth top and price top. For an export KAM, this is the most interesting market profile: still room to grow, but already valuing the product.</div>
+      <div class="insight-metric">
+        <span class="metric-pill">€9.66/litre</span>
+        <span class="metric-pill">+18% in 2025</span>
+        <span class="metric-pill">+200% since 2019</span>
+      </div>
+    </div>
+
+    <div class="insight-card opportunity">
+      <div class="insight-tag opportunity">Priority opportunity</div>
+      <div class="insight-title">UAE — the world's most expensive market</div>
+      <div class="insight-text">At €13.38/litre, the UAE is the market where Port Wine commands the highest price per litre — and growing 38% in 2025. The combination of high price, strong growth, and luxury consumer profile makes this market strategic for exporters looking to elevate their portfolio positioning. Distribution via Dubai provides access to the entire Middle East.</div>
+      <div class="insight-metric">
+        <span class="metric-pill">€13.38/litre</span>
+        <span class="metric-pill">+38% in 2025</span>
+        <span class="metric-pill">€2.29M in 2025</span>
+      </div>
+    </div>
+
+    <div class="insight-card watch">
+      <div class="insight-tag watch">Market to watch</div>
+      <div class="insight-title">Mexico and Finland — strong growth from a low base</div>
+      <div class="insight-text">Mexico (+57%) and Finland (+48%) are the fastest-growing markets in 2025, but both start from a relatively small base (€1–1.3M). The pattern is consistent with the early stage of market penetration — exactly the moment when an exporter can establish position before the competition. Finland has state distribution (Alko), which simplifies entry but requires specific certifications.</div>
+      <div class="insight-metric">
+        <span class="metric-pill">Mexico +57%</span>
+        <span class="metric-pill">Finland +48%</span>
+        <span class="metric-pill">Small base, high momentum</span>
+      </div>
+    </div>
+
+    <div class="insight-card alert">
+      <div class="insight-tag alert">Warning signal</div>
+      <div class="insight-title">USA — premium but contracting</div>
+      <div class="insight-text">The US offers the highest price per litre among major markets (€9.55/l) and remains third largest in absolute value (€37.8M). However, it shows a contraction trend since 2019 — falling from first to third place in value. Over-reliance on traditional European markets (France, UK, Netherlands) at lower price points suggests a volume strategy that may be undermining the category's global positioning.</div>
+      <div class="insight-metric">
+        <span class="metric-pill">€9.55/litre</span>
+        <span class="metric-pill">-1.2% vs 2024</span>
+        <span class="metric-pill">Declining since 2019</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:3rem">
+    <div class="section-label">Limitations and next steps</div>
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);margin-bottom:1rem;font-weight:500">What this study does not cover</h3>
+    <div class="limit-grid">
+      <div class="limit-card">
+        <div class="limit-label">Data scope</div>
+        <div class="limit-text">The analysis covers bottled Port Wine only. Bulk and special categories (Tawny, LBV, Vintage) — representing roughly half of total IVDP exports — are not included. A complete analysis would require combining all three categories.</div>
+      </div>
+      <div class="limit-card">
+        <div class="limit-label">Market share</div>
+        <div class="limit-text">Without total import data by country (e.g. UN Comtrade), it is not possible to calculate Portugal's market share in each destination. Knowing that South Korea imports a large amount of wine overall but little Port would be an additional relevant insight.</div>
+      </div>
+      <div class="limit-card">
+        <div class="limit-label">Competitive context</div>
+        <div class="limit-text">IVDP data reflects the sector in aggregate, not the performance of individual exporters. It is not possible to distinguish category growth from the growth of a specific player.</div>
+      </div>
+      <div class="limit-card">
+        <div class="limit-label">Next steps</div>
+        <div class="limit-text">Integrate UN Comtrade API to calculate Portuguese market share by country. Add special category analysis (Tawny, LBV). Build a volume forecasting model with Facebook Prophet for the top 10 markets.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="section" id="contact">
+  <div class="contact-area">
+    <div class="contact-title">André Sousa</div>
+    <p class="contact-desc">Key Account Manager with pharmaceutical export experience, transitioning into the wine sector.<br>Based in Vila Nova de Gaia — at the heart of the Port Wine lodges.</p>
+    <div class="contact-links">
+      <a href="https://www.linkedin.com/in/andrepocasousa/" class="contact-btn contact-btn-primary" target="_blank">LinkedIn</a>
+      <a href="https://github.com/andrepocassousa/porto-export-lens" class="contact-btn contact-btn-secondary" target="_blank">GitHub — view code</a>
+      <a href="mailto:andre.pocas.sousa@gmail.com" class="contact-btn contact-btn-secondary">Get in touch</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Porto Export Lens · André Sousa · Data: IVDP 2006–2025 · Built with DuckDB, SQL and Chart.js
+</footer>
+
+<script>
+const top15p = ['France','United Kingdom','USA','Netherlands','Belgium','Canada','Germany','Denmark','Brazil','Switzerland','Spain','Poland','Norway','Italy','South Korea'];
+const top15e = [65.98,48.5,37.81,37.62,28.27,19.8,19.0,17.32,10.59,9.83,5.39,4.81,4.43,3.59,3.43];
+const premium = ['South Korea','Denmark'];
+const acelp = ['Mexico','Finland','UAE','Sweden','S. Korea','Italy','China','Spain','Latvia','Macau','Austria','Angola','Brazil','UK','Switzerland'];
+const acelv = [57.2,47.9,37.9,23.9,18.5,16.2,11.7,10.8,10.5,10.3,9.0,8.8,8.6,6.1,5.1];
+const premp = ['UAE','Macau','S. Korea','USA','Denmark','China','Luxembourg','Finland','Czechia','Mexico','Switzerland','Ireland','Latvia','Canada','Sweden'];
+const premv = [13.38,11.07,9.66,9.55,9.18,8.2,7.93,7.6,6.82,6.7,6.7,6.55,6.54,6.38,5.96];
+const ticks = {color:'#7A6E68',font:{size:11}};
+const grid = {color:'rgba(0,0,0,0.05)'};
+
+new Chart(document.getElementById('chart1'),{
+  type:'bar',
+  data:{labels:top15p,datasets:[{data:top15e,backgroundColor:top15p.map(p=>premium.includes(p)?'#6B1E2A':'#D8CEC5'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' €'+ctx.raw.toFixed(1)+'M'}}},indexAxis:'y',
+    scales:{x:{ticks:{...ticks,callback:v=>'€'+v+'M'},grid},y:{ticks,grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('chart2'),{
+  type:'bar',
+  data:{labels:acelp,datasets:[{data:acelv,backgroundColor:acelv.map(v=>v>=30?'#1D7A5A':'#D8CEC5'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'+'+ctx.raw.toFixed(1)+'%'}}},indexAxis:'y',
+    scales:{x:{ticks:{...ticks,callback:v=>'+'+v+'%'},grid},y:{ticks:{...ticks,font:{size:10}},grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('chart3'),{
+  type:'bar',
+  data:{labels:premp,datasets:[{data:premv,backgroundColor:premv.map(v=>v>=9?'#6B1E2A':'#D8CEC5'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'€'+ctx.raw.toFixed(2)+'/l'}}},indexAxis:'y',
+    scales:{x:{ticks:{...ticks,callback:v=>'€'+v},grid},y:{ticks:{...ticks,font:{size:10}},grid:{display:false}}}}
+});
+</script>
+</body>
+</html>
