@@ -15,7 +15,7 @@
 
 [→ View dashboard](https://andrepocassousa.github.io/porto-export-lens/index-en.html)
 
-![Porto Export Lens Dashboard](assets/dashboard_preview.png.png)
+![Porto Export Lens Dashboard](assets/dashboard_eng_preview.png)
 
 ---
 
@@ -159,7 +159,7 @@ https://www.linkedin.com/in/andrepocasousa/
 
 [→ Ver dashboard](https://andrepocassousa.github.io/porto-export-lens/index.html)
 
-![Porto Export Lens Dashboard](assets/dashboard_preview.png.png)
+![Porto Export Lens Dashboard](assets/dashboard_pt_preview.png)
 
 ---
 
