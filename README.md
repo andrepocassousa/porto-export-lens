@@ -232,11 +232,38 @@ Sem dependências pagas. Sem ferramentas proprietárias.
 ```text
 porto-export-lens/
 ├── assets/
+│   └── dashboard_preview.png
 ├── data/
+│   ├── raw/
+│   └── porto_exportacoes.csv
 ├── sql/
+│   ├── 01_top15_markets.sql
+│   ├── 02_accelerating_markets.sql
+│   ├── 03_premium_markets.sql
+│   └── 04_kpis_overview.sql
 ├── index.html
 ├── index-en.html
+├── .gitignore
 └── README.md
+```
+
+
+## SQL queries 
+
+### Top 15 markets by value in 2025
+
+```sql
+SELECT
+    pais                              AS country,
+    ROUND(euros / 1000000.0, 2)       AS million_eur,
+    ROUND(litros / 1000000.0, 2)      AS million_litres,
+    ROUND(euros_por_litro, 2)         AS price_per_litre
+FROM porto_exportacoes
+WHERE ano = 2025
+  AND pais != 'Portugal'
+  AND euros > 0
+ORDER BY euros DESC
+LIMIT 15;
 ```
 
 ---
