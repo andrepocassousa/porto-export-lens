@@ -250,7 +250,7 @@ porto-export-lens/
 
 ## SQL queries 
 
-### Top 15 mercado em valor em 2025
+### Top 15 mercados por valor em 2025
 
 ```sql
 SELECT
