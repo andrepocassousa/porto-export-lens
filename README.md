@@ -2,7 +2,8 @@
 
 > A market intelligence tool built on public IVDP data to identify Port Wine export opportunities — framed from the perspective of a Key Account Manager.
 
-**[→ View dashboard (EN)](https://andresousa.github.io/porto-export-lens/index-en.html)** · **[→ Ver dashboard (PT)](https://andresousa.github.io/porto-export-lens/index.html)**
+[→ View dashboard (EN)](https://andrepocassousa.github.io/porto-export-lens/index-en.html)
+[→ Ver dashboard (PT)](https://andrepocassousa.github.io/porto-export-lens/index.html)
 
 ![Porto Export Lens Dashboard](assets/dashboard_preview.png.png)
 
